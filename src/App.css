@@ -1,6 +1,9 @@
 .App {
   text-align: center;
 }
+body {
+  background-color: #0052d0 !important;
+}
 
 .App-logo {
   height: 40vmin;
@@ -35,4 +38,26 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/*==================================FONTES=======================================*/
+@font-face {
+  font-family: "Ibm";
+  src: url("/public/fONTS/IBM_Plex_Sans_Arabic/IBMPlexSansArabic-Light.ttf");
+  font-weight: 300;
+}
+@font-face {
+  font-family: "Ibm";
+  src: url("/public/fONTS/IBM_Plex_Sans_Arabic/IBMPlexSansArabic-Regular.ttf");
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Ibm";
+  src: url("/public/fONTS/IBM_Plex_Sans_Arabic/IBMPlexSansArabic-SemiBold.ttf");
+  font-weight: 600;
+}
+@font-face {
+  font-family: "Ibm";
+  src: url("/public/fONTS/IBM_Plex_Sans_Arabic/IBMPlexSansArabic-Bold.ttf");
+  font-weight: 700;
 }

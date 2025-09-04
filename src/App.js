@@ -1,23 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import { Button } from "@mui/material";
+import "./App.css";
+import { Themproject } from "./Context/ProjectContext";
+
+//Compenets
+import CardWather from "./Project/Card";
+
+// MUI Compenets
+import { ThemeProvider } from "@emotion/react";
+import Container from "@mui/material/Container";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ThemeProvider theme={Themproject}>
+        <Container maxWidth="sm">
+          {/*Container Conten */}
+          <div
+            style={{
+              height: "100vh",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection:"column"      ,
+              gap:"10px"
+                   }}
+          >
+            {/*Card */}
+            <CardWather />
+            {/*=== Card ===*/}
+            <div style={{textAlign:"start" , width:"100%"}}>
+
+            <Button variant="text"  style={{color:"whitesmoke"}}> انجليزي</Button>
+            </div>
+          </div>
+
+          
+          {/*==== Container Conten ====*/}
+        </Container>
+      </ThemeProvider>
     </div>
   );
 }
