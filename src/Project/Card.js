@@ -1,8 +1,69 @@
 //Mui Copmenets
 import Typography from "@mui/material/Typography";
 import CloudIcon from '@mui/icons-material/Cloud';
+import axios from "axios";
+import { useState , useEffect } from "react";
 
-export default function CardWather(params) {
+
+export default function CardWather() {
+ /*State of water */
+  const [Weather, setWaeter] = useState({
+    temp:null,
+    Temp_max : null,
+    Temp_min : null,
+    description : "",
+    Date:"",
+    Loation:"",
+    iconCode: null
+  })
+  /*==== State of water == */
+
+  /* Response from api */
+  useEffect(()=>{
+     var CancelTokenCode ;
+     
+     // =========Get data================================
+        const UrlApi = "https://api.openweathermap.org/data/2.5/weather?q=Sour%20El%20Ghozlane,DZ&appid=32f91e41100758513c7ab2c2c52fa8b3&units=metric&lang=ar";
+        axios.get(UrlApi , {
+          cancelToken:axios.CancelToken((c)=>CancelTokenCode = c)
+        })
+        .then((Response)=>{
+          // تاريخ اليوم بالعربي
+               const today = new Date();
+               const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+               const dateInArabic = today.toLocaleDateString('ar-eg', options);       
+         // ===تاريخ اليوم بالعربي ===
+        
+          setWaeter({...Weather,
+            temp :Response.data.main.temp,
+            Temp_max :Response.data.main.temp_max,
+            Temp_min :Response.data.main.temp_min,
+            description:Response.data.weather[0].description	,
+            Date:dateInArabic,
+            iconCode:Response.data.weather[0].icon	,
+            Loation:""
+            
+          })
+          
+        })
+        .catch(err=>  Error('erro in ftech' + err))
+   
+    //=====Get data end===
+
+    /* clen up*/ 
+    return ()=>{
+      console.log("clen up colleng");
+      
+      CancelTokenCode()
+    }
+ 
+    
+
+  },[])
+  
+ 
+   
+  
   return (
     <>
       {/*Card */}
@@ -12,7 +73,7 @@ export default function CardWather(params) {
           color: "whitesmoke",
           padding: "15px",
           borderRadius: "15px",
-          width:"100%", 
+          width:"100%",   
           boxShadow:"0px 0px 30px rgba(0, 0,0 ,0.1 )"
         }}
       >
@@ -29,14 +90,14 @@ export default function CardWather(params) {
             dir="rtl"
           >
             <Typography variant="h2" fontWeight={"700"}>
-              الجزائر
+              سور الغزلان
             </Typography>
             <Typography
               variant="h6"
               fontWeight={"600"}
               style={{ marginRight: "15px" }}
             >
-              الاثنين ٢٠٢٥ ٠٩ ٠٢
+             {Weather.Date}
             </Typography>
           </div>
           {/*=== Citey & Date  === */}
@@ -46,25 +107,29 @@ export default function CardWather(params) {
           {/** card conent  */}
              <div  style={{display:"flex" , justifyContent:"space-around" , alignItems:"center" , direction:"rtl"}}>
                {/*Degerre & descripten */}
-                    <div>
+                    <div> 
                         {/*Tepm +IMgTemp */}
                         <div> 
+                          <div style={{display:"flex" , justifyContent:"space-around"  ,alignItems:"center"}}>
+
                                 <Typography variant="h1" textAlign={"center"} fontWeight={"700"}>
-                                      38°           
+                                            {Math.round( Weather.temp)}° 
                                </Typography>
+                               <img src={`https://openweathermap.org/img/wn/${Weather.iconCode}@2x.png`}></img>
+                          </div>
                                 <Typography variant="h6" textAlign={"center"} fontWeight={"600"} >
-                                   حرارة عالية مع رطوبة           
+                                   {Weather.description}        
                                </Typography>
                                {/*Min  & Max */}
                                <div style={{display:"flex " , justifyContent:"right" , alignItems:"center" , gap:"10px"}}>
                                      <Typography variant="h6" textAlign={"end"} fontWeight={"500"}>
-                                               الصغرى :38          
+                                               الصغرى :°{Weather.Temp_min}          
                                      </Typography>
 
                                             <h4>|</h4>
                                           
                                      <Typography variant="h6" textAlign={"end"} fontWeight={"500"}>
-                                               الكبرى :48          
+                                               الكبرى : °{ Weather.Temp_max}          
                                      </Typography>
                                      </div>
                                {/*== Min  & Max ==*/}
@@ -80,6 +145,7 @@ export default function CardWather(params) {
                {/*ICon Cloud */}
                <div>
                     <CloudIcon  style={{fontSize:"200px"}}/>
+                   
                </div>
                {/*===  ICon Cloud ===*/}
              </div>
