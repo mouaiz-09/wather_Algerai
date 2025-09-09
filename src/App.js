@@ -33,7 +33,10 @@ function App() {
             {/*=== Card ===*/}
             <div style={{textAlign:"start" , width:"100%"}}>
 
-            <Button variant="text"  style={{color:"whitesmoke"}}> انجليزي</Button>
+            <Button variant="text"  
+              style={{color:"whitesmoke", fontSize:"15px" , fontWeight:"800"}}> 
+                    انجليزي
+           </Button>
             </div>
           </div>
 
