@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 
 
 
-export default function CardWather() {
+export default function CardWather({Data}) {
   /*State of water */
   const [Weather, setWaeter] = useState({
     temp: null,
@@ -20,8 +20,15 @@ export default function CardWather() {
   });
   /*==== State of water == */
 
-  /*Transltion  */
+  /*------Transltion---------  */
   const { t, i18n } = useTranslation();
+
+   useEffect(()=>{
+      console.log(Data);
+      i18n.changeLanguage(Data)
+     
+    
+      } , [Data,i18n])
  
   /*======Transltion  ===*/
 
@@ -32,41 +39,39 @@ export default function CardWather() {
 
     // =========Get data================================
     const UrlApi =
-      "https://api.openweathermap.org/data/2.5/weather?q=Sour%20El%20Ghozlane,DZ&appid=32f91e41100758513c7ab2c2c52fa8b3&units=metric&lang=ar";
+      "https://api.openweathermap.org/data/2.5/weather?q=Sour%20El%20Ghozlane,DZ&appid=32f91e41100758513c7ab2c2c52fa8b3&units=metric&lang="+Data;
     axios
       .get(UrlApi, {
         cancelToken: new axios.CancelToken((c) => (CancelTokenCode = c)),
       })
       .then((Response) => {
-        // تاريخ اليوم بالعربي
-        const today = new Date();
-        const options = {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        };
-        const dateInArabic = today.toLocaleDateString("ar-dz", options);
-        // ===تاريخ اليوم بالعربي ===
-
+        
+   // تاريخ اليوم بالعربي
+      
+   const today = new Date();
+   const options = {
+     weekday: "long",
+     year: "numeric",
+     month: "long",
+     day: "numeric",
+   };
+   const dateInArabic = today.toLocaleDateString(Data, options);
         setWaeter({
           ...Weather,
           temp: Response.data.main.temp,
           Temp_max: Response.data.main.temp_max,
           Temp_min: Response.data.main.temp_min,
           description: Response.data.weather[0].description,
-          Date: dateInArabic,
           iconCode: Response.data.weather[0].icon,
           Loation: "",
+          Date:dateInArabic
         });
       })
       .catch((err) => Error("erro in ftech" + err));
 
     //=====Get data end===
 
-    //=====transltion======
-    i18n.changeLanguage("ar")
-    //=====transltion======
+  
 
     /* clen up*/
     return () => {
@@ -74,15 +79,18 @@ export default function CardWather() {
 
       CancelTokenCode();
     };
-  }, []);
-
+  }, [Data]);
+ ;
+  
   return (
     <>
       {/*Card */}
       <Typography
-      fontWeight={"700"} variant='h2' style={{color:'white' , fontFamily:"Gulzar" , marginBottom:"30px"}} 
+      fontWeight={"700"} variant='h2' style={{color:'white' , fontFamily:"Gulzar" , marginBottom:"30px" ,
+     
+      }} 
       >
-          الطقس
+          {t("weather")}
        </Typography>
       <div
         style={{
@@ -95,7 +103,7 @@ export default function CardWather() {
         }}
       >
         {/*Card Conetent */}
-        <div>
+        <div   dir={Data ==="ar" ?"rtl" : "ltf"}>
           {/*Citey & Date */}
           <div
             style={{
@@ -104,10 +112,10 @@ export default function CardWather() {
               justifyContent: "start",
               gap: "15px",
             }}
-            dir="rtl"
+            dir={Data ==="ar" ?"rtl" : "ltf"}
           >
             <Typography variant="h2" fontWeight={"700"}>
-              سور الغزلان
+             {t("sour el gzlane")}
              
             </Typography>
             <Typography
@@ -128,19 +136,22 @@ export default function CardWather() {
               display: "flex",
               justifyContent: "space-around",
               alignItems: "center",
-              direction: "rtl",
+             
             }}
+            dir={Data ==="ar" ?"rtl" : "ltf"}
           >
             {/*Degerre & descripten */}
             <div>
               {/*Tepm +IMgTemp */}
-              <div>
+              <div    >
                 <div
                   style={{
                     display: "flex",
                     justifyContent: "space-around",
                     alignItems: "center",
+                   
                   }}
+                  dir={Data ==="ar" ?"rtl" : "ltf"}
                 >
                   <Typography
                     variant="h1"
@@ -171,13 +182,13 @@ export default function CardWather() {
                   }}
                 >
                   <Typography variant="h6" textAlign={"end"} fontWeight={"500"}>
-                    الصغرى :°{Weather.Temp_min}
+                    {t("min")} :°{Weather.Temp_min}
                   </Typography>
 
                   <h4>|</h4>
 
                   <Typography variant="h6" textAlign={"end"} fontWeight={"500"}>
-                    الكبرى : °{Weather.Temp_max}
+                    {t("max")} : °{Weather.Temp_max}
                   </Typography>
                 </div>
                 {/*== Min  & Max ==*/}
@@ -190,7 +201,7 @@ export default function CardWather() {
 
             {/*ICon Cloud */}
             <div>
-              <CloudIcon style={{ fontSize: "200px" }} />
+              <CloudIcon style={{ fontSize: "300px" }} />
             </div>
             {/*===  ICon Cloud ===*/}
           </div>
